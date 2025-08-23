@@ -1,1 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BlueLink • Home</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="header" >
+  <div class="container row" >
+    <div class="brand"> <a href="index.html" style="padding-right:20px;">  <img src="Instagram post - 1 (1).png" style="border-radius: 0px;" class="logo"><span>BlueLink</span></a>
+    <div style=" height: 5px;padding: 0;margin: 0;display: flex; border: 3px solid rgb(220, 226, 230); border-radius: 8px; height: 30px;"><img src="srch.png" alt="" height="20" width="20" style="margin:4px ;">
+        <input type="text"  name="name" id="seh" placeholder=" search" style="display: inline-block; border: none;; outline: none;"></div></div>
 
+        <div clas="xfg"  style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-weight:600;">
+          <a href="index.html" style="margin-right: 20px">Home</a>
+          <a href="network.html" style="margin-right: 20px;color: blue;">Network</a>
+          <a href="notifications.html" style="margin-right: 20px" >Notifications</a>
+          <a href="jobs.html" style="margin-right: 20px;color: blue;">Jobs</a>
+          <a href="profile.html" style="margin-right: 20px">Profile</a>
+
+        </div>
+    <div class="actions" style="white-space: nowrap;">
+      
+      
+      <select aria-label="Language"><option>EN</option><option>HI</option></select>
+      <button class="btn">Log in</button>
+      <button class="btn primary">Sign up</button>
+    </div>
+  </div>
+</header>
+
+<main class="container grid">
+  <section class="card">
+    <h1 class="section-title">Find work or hire skilled workers near you</h1>
+    <div class="grid cols-3">
+      <input id="trade" class="input" placeholder="Trade (Plumber, Mason, ...)" />
+      <input id="location" class="input" placeholder="Location (e.g., Andheri)" />
+      <button id="searchBtn" class="btn primary" >Search</button>
+    </div>
+    <div class="chips" style="margin-top:10px">
+      <span class="badge">Plumber</span><span class="badge">Mason</span>
+      <span class="badge">Carpenter</span><span class="badge">Electrician</span>
+      <span class="badge">Painter</span>
+    </div>
+  </section>
+
+  <section class="grid cols-2">
+    <div class="card">
+      <h2 class="section-title" style="color: blue;">Recommended jobs near you</h2>
+      <div id="jobFeed" class="grid"></div>
+      <a class="btn full" href="jobs.html">See all jobs</a>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">How it works</h2>
+      <ol class="grid">
+        <b>
+        <li class="item"> Create your profile and verify identity</li>
+        <li class="item"> Get matched to jobs nearby</li>
+        <li class="item"> Apply with one tap and chat</li>
+        <li class="item"> Build ratings and earn more</li>
+        </b>
+      </ol>
+      <div class="kpis">
+        <span class="badge">Aadhaar‑verified</span>
+        <span class="badge">Multilingual</span>
+        <span class="badge">Low‑data</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">Community feed</h2>
+    <div class="grid">
+      <div class="item">Safety tip: Meet at public places. Payments after work milestones.</div>
+      <div class="item">Hiring fast? <a href="post.html">Post a job in 60s</a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="container footer">© BlueLink • Trusted jobs for skilled workers</footer>
+
+<script src="app.js"></script>
+<script>
+  // render top 3 jobs
+  const list = $("#jobFeed");
+  MOCK_JOBS.slice(0,3).forEach(j=>{
+    const el=document.createElement("div");
+    el.className="item";
+    el.innerHTML = `
+      <div class="row"><b>${j.title}</b> ${j.verified?'<span class="badge">Verified</span>':''}</div>
+      <div class="inline"><span>${j.trade}</span> • <span>${j.pay}</span> • <span>${j.distance}</span> • <span>${j.shift}</span></div>
+      <div class="row"><small>${j.employer}</small><button class="btn" onclick="go('jobs.html')">Apply</button></div>`;
+    list.appendChild(el);
+  });
+
+  $("#searchBtn").addEventListener("click", ()=>{
+    const t=$("#trade").value.trim(); const l=$("#location").value.trim();
+    const q = new URLSearchParams({trade:t,location:l}).toString();
+    location.href = "jobs.html?"+q;
+  });
+
+  $all(".badge").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      location.href="jobs.html?trade="+encodeURIComponent(b.textContent);
+    })
+  });
+</script>
+</body>
+</html>
