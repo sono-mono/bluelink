@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BlueLink • Jobs</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="header" >
+  <div class="container row" >
+    <div class="brand"> <a href="index.html" style="padding-right:20px;">  <img src="Instagram post - 1 (1).png" style="border-radius: 0px;" class="logo"><span>BlueLink</span></a>
+    <div style=" height: 5px;padding: 0;margin: 0;display: flex; border: 3px solid rgb(220, 226, 230); border-radius: 8px; height: 30px;"><img src="srch.png" alt="" height="20" width="20" style="margin:4px ;">
+        <input type="text"  name="name" id="seh" placeholder=" search" style="display: inline-block; border: none;; outline: none;"></div></div>
+
+        <div clas="xfg"  style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-weight:600;">
+          <a href="index.html" style="margin-right: 20px">Home</a>
+          <a href="network.html" style="margin-right: 20px;color: blue;">Network</a>
+          <a href="notifications.html" style="margin-right: 20px" >Notifications</a>
+          <a href="jobs.html" style="margin-right: 20px;color: blue;">Jobs</a>
+          <a href="profile.html" style="margin-right: 20px">Profile</a>
+
+        </div>
+    <div class="actions" style="white-space: nowrap;">
+      
+      
+      <select aria-label="Language"><option>EN</option><option>HI</option></select>
+      <button class="btn">Log in</button>
+      <button class="btn primary">Sign up</button>
+    </div>
+  </div>
+</header>
+
+<main class="container grid">
+  <section class="card">
+    <h1 class="section-title">Jobs near you</h1>
+    <div class="grid cols-3">
+      <input id="fltTrade" class="input" placeholder="Trade" />
+      <select id="fltSort" class="input">
+        <option value="new">Newest</option>
+        <option value="pay">Highest pay</option>
+      </select>
+      <label class="inline"><input id="fltVerified" type="checkbox"/> Verified only</label>
+    </div>
+  </section>
+
+  <section id="jobsList" class="grid"></section>
+<a href="post1.html" style="text-align: center;"><p style="text-align:center; color:blue;width:  300px;
+display: inline-block; padding: 3px 3px 3px 3px; border: 2px solid grey; border-radius: 20px;
+ background-color: white;font-weight: 600;">Start a job post</p></a>
+</main>
+
+<script src="app.js"></script>
+<script>
+  // read query params to prefill
+  const sp = new URLSearchParams(location.search);
+  $("#fltTrade").value = sp.get("trade")||"";
+
+  let jobs = load("jobs", MOCK_JOBS);
+
+  function render(){
+    const trade = $("#fltTrade").value.trim().toLowerCase();
+    const verifiedOnly = $("#fltVerified").checked;
+    const sort = $("#fltSort").value;
+
+    let list = jobs.filter(j=>{
+      const t = !trade || j.trade.toLowerCase().includes(trade);
+      const v = !verifiedOnly || j.verified;
+      return t && v;
+    });
+
+    if(sort==="pay"){
+      // naive parse of ₹X/day into number
+      list.sort((a,b)=>{
+        const pa = parseInt((a.pay.match(/\d+/)||[0]));
+        const pb = parseInt((b.pay.match(/\d+/) || ["0"])[0]);
+
+        return pb - pa;
+      });
+    } else {
+      list.sort((a,b)=>b.id - a.id);
+    }
+
+    const wrap = $("#jobsList");
+    wrap.innerHTML="";
+    if(list.length===0){
+      const empty = document.createElement("div");
+      empty.className="card";
+      empty.innerHTML = `
+        <h3>No jobs found</h3>
+        <p>Try clearing filters or adding more skills to your profile.</p>
+        <div class="chips"><span class="badge">Plumber</span><span class="badge">Mason</span><span class="badge">Carpenter</span></div>`;
+      wrap.appendChild(empty);
+      return;
+    }
+
+    list.forEach(j=>{
+      const el=document.createElement("div");
+      el.className="card";
+      el.innerHTML = `
+        <div class="row"><b>${j.title}</b> ${j.verified?'<span class="badge">Verified</span>':''}</div>
+        <div class="inline">${j.trade} • ${j.pay} • ${j.distance} • ${j.shift}</div>
+        <div class="row"><small>${j.employer}</small>
+          <div class="inline">
+            <button class="btn" onclick="toast('Saved')">Save</button>
+            <button class="btn primary" onclick="apply(${j.id})">One‑tap apply</button>
+          </div>
+        </div>`;
+      wrap.appendChild(el);
+    })
+  }
+
+  function apply(id){
+    const n = load("notifs", MOCK_NOTIFS);
+    n.unshift({id:Date.now(),type:"update",text:`Application sent for job #${id}`});
+    save("notifs", n);
+    toast("Applied successfully","success");
+  }
+
+  $("#fltTrade").addEventListener("input",render);
+  $("#fltVerified").addEventListener("change",render);
+  $("#fltSort").addEventListener("change",render);
+  render();
+</script>
+</body>
+</html>

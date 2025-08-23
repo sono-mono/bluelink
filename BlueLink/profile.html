@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BlueLink • Profile</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="header" >
+  <div class="container row" >
+    <div class="brand"> <a href="index.html" style="padding-right:20px;">  <img src="Instagram post - 1 (1).png" style="border-radius: 0px;" class="logo"><span>BlueLink</span></a>
+    <div style=" height: 5px;padding: 0;margin: 0;display: flex; border: 3px solid rgb(220, 226, 230); border-radius: 8px; height: 30px;"><img src="srch.png" alt="" height="20" width="20" style="margin:4px ;">
+        <input type="text"  name="name" id="seh" placeholder=" search" style="display: inline-block; border: none;; outline: none;"></div></div>
+
+        <div clas="xfg"  style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-weight:600;">
+          <a href="index.html" style="margin-right: 20px">Home</a>
+          <a href="network.html" style="margin-right: 20px ; color: blue;">Network</a>
+          <a href="notifications.html" style="margin-right: 20px" >Notifications</a>
+          <a href="jobs.html" style="margin-right: 20px; color: blue;">Jobs</a>
+          <a href="profile.html" style="margin-right: 20px">Profile</a>
+
+
+        </div>
+    <div class="actions" style="white-space: nowrap;">
+      
+      
+      <select aria-label="Language"><option>EN</option><option>HI</option></select>
+      <button class="btn">Log in</button>
+      <button class="btn primary">Sign up</button>
+    </div>
+  </div>
+</header>
+
+<main class="container grid">
+  <section class="card">
+    <div class="row">
+      <div class="inline" style="gap:12px">
+        <div style="width:64px;height:64px;border-radius:999px;background:#c7d2fe"></div>
+        <div>
+          <h1 class="section-title" style="margin:0; color: blue;">Your Profile</h1>
+          <div class="chips">
+            <span class="badge">Aadhaar‑verified</span>
+            <span class="badge">Top‑Rated</span>
+          </div>
+        </div>
+      </div>
+      <button id="btnShare" class="btn">Share profile</button>
+    </div>
+
+    <div class="grid cols-3" style="margin-top:12px">
+      <div class="item"><b>Name</b><div><input id="pfName" class="input" value="Rahul Sharma"/></div></div>
+      <div class="item"><b>Trades</b><div><input id="pfTrades" class="input" value="Plumber, Electrician"/></div></div>
+      <div class="item"><b>Languages</b><div><input id="pfLang" class="input" value="Hindi, English"/></div></div>
+      <div class="item"><b>Location radius</b><div><input id="pfRadius" class="input" value="10 km"/></div></div>
+      <div class="item"><b>Availability</b><div><input id="pfAvail" class="input" value="Mon‑Sat"/></div></div>
+      <div class="item"><b>Expected wage</b><div><input id="pfWage" class="input" value="₹1000/day"/></div></div>
+    </div>
+
+    <div class="grid cols-2">
+      <div class="card">
+        <h3 class="section-title">Skills</h3>
+        <div id="skills" class="chips"></div>
+        <div class="row"><input id="skillNew" class="input" placeholder="Add a skill"/><button id="skillAdd" class="btn">Add</button></div>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title">Portfolio</h3>
+        <div id="portfolio" class="grid cols-3"></div>
+        <div class="row"><input type="file" id="file" /><button class="btn">Upload</button></div>
+      </div>
+    </div>
+
+    <div class="grid cols-2">
+      <div class="card">
+        <h3 class="section-title">Ratings & reviews</h3>
+        <div class="item">⭐ 4.7 • “Good work and on time.” — A1 Constructions</div>
+        <div class="item">⭐ 4.8 • “Professional and polite.” — HomeFix</div>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title">Verification</h3>
+        <div class="grid">
+          <div class="item">Phone: Verified</div>
+          <div class="item">Aadhaar: Verified</div>
+          <div class="item">Bank: Not linked <button class="btn" onclick="toast('Linking flow')">Link now</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <button id="btnSave" class="btn primary">Save changes</button>
+      <a href="notifications.html" class="btn">View notifications</a>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+<script>
+  let skills = load("skills", ["Leak repair","Wiring","Pipe fitting"]);
+  function paintSkills(){
+    const wrap=$("#skills"); wrap.innerHTML="";
+    skills.forEach((s,i)=>{
+      const b=document.createElement("span");
+      b.className="badge"; b.style.cursor="pointer"; b.title="Click to remove";
+      b.textContent=s; b.addEventListener("click", ()=>{ skills.splice(i,1); save("skills",skills); paintSkills(); });
+      wrap.appendChild(b);
+    })
+  }
+  paintSkills();
+
+  $("#skillAdd").addEventListener("click", ()=>{
+    const val=$("#skillNew").value.trim(); if(!val) return;
+    skills.push(val); save("skills",skills); $("#skillNew").value=""; paintSkills();
+  });
+
+  $("#btnSave").addEventListener("click", ()=>{
+    const data = {
+      name: $("#pfName").value, trades: $("#pfTrades").value, lang: $("#pfLang").value,
+      radius: $("#pfRadius").value, avail: $("#pfAvail").value, wage: $("#pfWage").value, skills
+    };
+    save("profile", data);
+    toast("Profile saved","success");
+  });
+
+  $("#btnShare").addEventListener("click", ()=>{
+    navigator.clipboard.writeText(location.href).then(()=>toast("Profile link copied","success"))
+  });
+</script>
+</body>
+</html>

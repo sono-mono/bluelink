@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BlueLink • Notifications</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="header" >
+  <div class="container row" >
+    <div class="brand"> <a href="index.html" style="padding-right:20px;">  <img src="Instagram post - 1 (1).png" style="border-radius: 0px;" class="logo"><span>BlueLink</span></a>
+    <div style=" height: 5px;padding: 0;margin: 0;display: flex; border: 3px solid rgb(220, 226, 230); border-radius: 8px; height: 30px;"><img src="srch.png" alt="" height="20" width="20" style="margin:4px ;">
+        <input type="text"  name="name" id="seh" placeholder=" search" style="display: inline-block; border: none;; outline: none;"></div></div>
+
+        <div clas="xfg"  style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;; font-weight:600;">
+          <a href="index.html" style="margin-right: 20px">Home</a>
+          <a href="network.html" style="margin-right: 20px;color: blue;">Network</a>
+          <a href="notifications.html" style="margin-right: 20px" >Notifications</a>
+          <a href="jobs.html" style="margin-right: 20px ; COLOR:blue;">Jobs</a>
+          <a href="profile.html" style="margin-right: 20px">Profile</a>
+
+        </div>
+    <div class="actions" style="white-space: nowrap;">
+      
+      
+      <select aria-label="Language"><option>EN</option><option>HI</option></select>
+      <button class="btn">Log in</button>
+      <button class="btn primary">Sign up</button>
+    </div>
+  </div>
+</header>
+<main class="container grid">
+  <section class="card">
+    <h1 class="section-title" style="color: blue;">Notifications</h1>
+    <div class="row">
+      <div class="chips">
+        <button class="btn" data-filter="all">All</button>
+        <button class="btn" data-filter="match">Job matches</button>
+        <button class="btn" data-filter="update">Updates</button>
+        <button class="btn" data-filter="safety">Safety</button>
+      </div>
+      <button id="btnClear" class="btn">Mark all read</button>
+    </div>
+  </section>
+
+  <section id="notifList" class="grid"></section>
+</main>
+
+<script src="app.js"></script>
+<script>
+  let notifs = load("notifs", MOCK_NOTIFS);
+  let current = "all";
+
+  function paint(){
+    const list = $("#notifList");
+    list.innerHTML="";
+    const items = notifs.filter(n=> current==="all" ? true : n.type===current);
+    if(items.length===0){
+      const empty=document.createElement("div");
+      empty.className="card";
+      empty.textContent="You're all caught up!";
+      list.appendChild(empty); return;
+    }
+    items.forEach(n=>{
+      const el=document.createElement("div");
+      el.className="card-row card";
+      const color = n.type==="safety"?"#fef3c7": n.type==="match"?"#ecfeff":"#eef2ff";
+      el.style.background = color;
+      el.innerHTML=`<div style="flex:1"><b>${n.type.toUpperCase()}</b><div>${n.text}</div></div>
+        <button class="btn ghost" onclick="dismiss(${n.id})">Dismiss</button>`;
+      list.appendChild(el);
+    })
+  }
+  function dismiss(id){
+    notifs = notifs.filter(x=>x.id!==id);
+    save("notifs", notifs);
+    paint();
+  }
+  $("#btnClear").addEventListener("click", ()=>{
+    notifs=[]; save("notifs", notifs); paint(); toast("All cleared")
+  });
+  $all("[data-filter]").forEach(b=>b.addEventListener("click", ()=>{ current=b.dataset.filter; paint(); }));
+  paint();
+</script>
+</body>
+</html>
