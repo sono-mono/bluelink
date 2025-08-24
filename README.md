@@ -1,4 +1,4 @@
-# BlueLink
+# BlueLink : EMPOWERING THE CORE OF NATION
 
 **BlueLink** is a platform built to transform the way blue-collar workers in India discover, access, and secure employment. By bringing technology and trust into the largely unorganized manual labor sector, BlueLink aims to empower workers, create economic opportunity, and foster inclusive growth.
 
