@@ -131,7 +131,7 @@ cursor:pointer;
         align-items:center}
 .row{display:flex;gap:12px;
      align-items:center;j
-       ustify-content:space-between}
+       justify-content:space-between}
 .chips{display:flex;
        gap:8px;
        flex-wrap:wrap}
@@ -139,4 +139,5 @@ cursor:pointer;
         color:var(--muted);
         font-size:14px}
 .hidden{display:none !important}
+
 
