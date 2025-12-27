@@ -29,7 +29,7 @@ BlueLink provides a digital platform where workers, contractors, and employers c
 - **Industry Transformation:** Platforms like BlueLink are key to bringing organization and trust to sectors that have historically been fragmented and opaque.
 - **Social Upliftment:** By giving millions of workers access to better jobs, fair pay, and career growth, BlueLink directly contributes to poverty reduction and inclusive economic development.
 - **Data-Driven, Transparent Ecosystem:** As more data is generated, the labor market becomes smarter—improving skills visibility, enabling targeted skilling initiatives, and enhancing employer-employee fit.
-- **Replicable Model:** The platform’s approach can be extended to new geographies and adapted for other segments, magnifying its economic and social impact.
+- **Replicable Model:** The platform’s approach can be extended to new geographies and adapted for other segments, magnifying its economic  impact.
 
 ---
 
